@@ -1,0 +1,531 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+
+    <meta charset="utf-8" />
+    
+se esta haciendo en visual estudio 2012.
+el problema es que el dato que se carga en el fielupload no guarda, los datos del fromulario si se estan guardando.
+
+---------------------html--------------------
+<title>Registrar Libro</title>
+    <link rel="stylesheet" href="/estilo/bootstrap.css" media="all" />
+    <link rel="stylesheet" href="estilo/bootstrap.min.css" />
+    <link rel="stylesheet" href="/estilo/bootstrap-responsive.css" media="all" />
+    <link rel="stylesheet" href="../estilo/estilo.css" media="all" />
+    <script src="../js/Clear.js"></script>
+    <script src="../js/validaciones.js"></script>
+    <script src="../js/activar.js"> </script>
+    <script src="/js/jquery-1.10.2.min.js"></script>
+    <script src="/estilo/js/bootstrap.js"></script>
+    <script src="/js/bootstrap-carousel.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/js/bootstrap-dropdown.js"></script>
+    <link rel="stylesheet" href="Content/themes/base/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+    <script src="/resources/demos/external/jquery.bgiframe-2.1.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/Layout.css" />
+    <script>
+    
+    </script>
+    <script>
+        function abrir_dialog() {
+            $("#dialog").dialog(
+            {
+                modal: true,
+                resizable: false,
+                width: 500,
+                heigth: 250,
+                title: 'Agregar Autor:',
+                buttons: {
+                    Guardar: function (
+                    ) {
+                        updateAutor();
+                    },
+                    Cancelar: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        };
+
+
+        function updateAutor() {
+            var autor = new Object();
+            var list = document.getElementById("ListBox1");
+            var opcion;
+            opcion = $('#TextNombre').val();
+            autor.nombre = $('#TextNombre').val();
+            autor.apellidos = $('#TextAP').val();
+            autor.pais = $('#TextPais').val();
+
+
+            var params = new Object();
+            params.autor = autor;
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "RegistrarLibro.aspx/ActualizarAutor",
+                data: JSON.stringify(params),
+                dataType: "json",
+                async: true,
+                success: function (data) {
+
+                    alert('Autor ' + autor.nombre + ' agregado');
+                    $('#dialog').dialog("close");
+
+
+                },
+                error: function (request, status, error) {
+                    alert(JSON.parse(request.responseText).Message);
+                }
+            });
+        }
+
+    </script>
+
+</head>
+<body>
+    
+                <div class="well well-lg">
+                    <form id="form1" action="#" method="post" runat="server">
+
+                        <div id="dialog" title="Agregar Autor" style="display: none">
+
+                            <p>
+                                <asp:Label ID="Label2" runat="server" Text="Nombre"></asp:Label></p>
+                            <p>
+                                <asp:TextBox ID="TextNombre" runat="server"></asp:TextBox></p>
+                            <p>
+                                <asp:Label ID="Label3" runat="server" Text="Apellidos"></asp:Label></p>
+                            <p>
+                                <asp:TextBox ID="TextAP" runat="server"></asp:TextBox></p>
+                            <p>
+                                <asp:Label ID="Label5" runat="server" Text="País"></asp:Label></p>
+                            <p>
+                                <asp:TextBox ID="TextPais" runat="server"></asp:TextBox></p>
+                        </div>
+
+                        <asp:ScriptManager ID="ScriptManager1" runat="server">
+                        </asp:ScriptManager>
+                        <br />
+                        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                            <ContentTemplate>
+        <table  id="table1" ="auto-style3">
+            <tr>
+
+                <td class="auto-style4">
+                    <fieldset>
+                        <legend></legend>
+                        <div class="col-lg-7 col-lg-offset-2">
+                        
+                        <legend>Ficha Libro</legend>
+                        <div class=" form-group">
+                            <label>
+                            Clave</label>
+                            <asp:TextBox ID="TextBox2" runat="server" class="form-control" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Folio</label>
+                            <asp:TextBox ID="TextBox16" runat="server" class="form-control" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Titulo</label>
+                            <asp:TextBox ID="TextBox3" runat="server" class="form-control" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Autor</label>
+                            <asp:Button ID="Button5" runat="server" Height="22px" OnClick="Button2_Click" OnClientClick="abrir_dialog()" Text="+ Autor" />
+                        
+                            <label>
+                            Editorial</label>
+                            <asp:TextBox ID="TextBox4" runat="server" class="form-control" onkeypress="javascript:return sololetras(event)" required="true"></asp:TextBox>
+                       
+                            <label>
+                            Idioma</label>
+                            <asp:TextBox ID="TextBox9" runat="server" class="form-control" onkeypress="javascript:return sololetras(event)" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Genero</label>
+                            <asp:TextBox ID="TextBox10" runat="server" class="form-control" onkeypress="javascript:return sololetras(event)" required="true"></asp:TextBox>
+                        </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend></legend>
+                        <div class="col-lg-7 col-lg-offset-2">
+                        <legend>Libros</legend>
+                        <div class=" form-group">
+                            <label>
+                            Año</label>
+                            <asp:TextBox ID="TextBox14" runat="server" class="form-control" MaxLength="4" onkeypress="javascript:return solonumeros(event)" required="true"></asp:TextBox>
+                       
+                            <label>
+                            Volumen</label>
+                            <asp:TextBox ID="TextBox13" runat="server" class="form-control" MaxLength="4" onkeypress="javascript:return solonumeros(event)" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Numero de ejemplar
+                            </label>
+                            <asp:TextBox ID="TextBox17" runat="server" class="form-control" MaxLength="4" onkeypress="javascript:return solonumeros(event)" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Nume ejemplares</label>
+                            <asp:TextBox ID="TextBox5" runat="server" class="form-control" MaxLength="4" onkeypress="javascript:return solonumeros(event)" required="true"></asp:TextBox>
+             
+                            <label>
+                            País</label>
+                            <asp:TextBox ID="TextBox11" runat="server" class="form-control" onkeypress="javascript:return sololetras(event)" required="true"></asp:TextBox>
+                        </div>
+                        </div>
+
+                    </fieldset>
+                    <fieldset>
+                        <legend></legend>
+                        <div class="col-lg-7 col-lg-offset-2">
+                        <legend>Información</legend>
+                        <div class=" form-group">
+                            <label>
+                            Ubicación</label>
+                            <asp:TextBox ID="TextBox6" runat="server" class="form-control" onkeypress="javascript:return sololetras(event)" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Estado</label>
+                            <asp:TextBox ID="TextBox7" runat="server" class="form-control" onkeypress="javascript:return sololetras(event)" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Reseña</label>
+                            <asp:TextBox ID="TextBox8" runat="server" class="form-control" onkeypress="javascript:return sololetras(event)" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Descripción</label>
+                            <asp:TextBox ID="TextBox12" runat="server" class="form-control" onkeypress="javascript:return sololetras(event)" required="true"></asp:TextBox>
+                        
+                            <label>
+                            Portada</label>
+                            <asp:FileUpload ID="FileUpload1" runat="server" />
+                        </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-lg-10 col-lg-offset-2">
+                                <asp:Button ID="Button1" type="submit" class="btn btn-primary" runat="server" OnClick="Button1_Click" Text="Guardar" />
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <tr>
+                        <td>
+                            <asp:Label ID="lblContador" runat="server" Text="Label"></asp:Label>
+                            <br />
+                            <asp:Panel ID="pnlMain" runat="server">
+                                <asp:ListBox ID="ListBox1" runat="server" AutoPostBack="True"></asp:ListBox>
+                            </asp:Panel>
+                            <asp:DropDownList ID="DropDownList1" runat="server">
+                            </asp:DropDownList>
+                    </tr>
+        </table>
+             </ContentTemplate>
+        </asp:UpdatePanel>
+                        </form>
+                </div>
+            </div>
+        </div>
+        <div id="" class="row">
+
+            <div id="footer" class="span12">
+                <span>Todos los derechos reservados</span><br />
+
+            </div>
+        </div>
+    </div>
+    <div>
+    </div>
+</body>
+</html>
+
+---------------------------------------- código cs-----------------
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.Services;
+using System.Web.UI.WebControls.WebParts;
+using System.Xml.Linq;
+using Newtonsoft.Json;
+using Lógica;
+
+namespace SICOB
+{
+    public partial class RegistrarLibro : System.Web.UI.Page
+    {
+        Lógica.LibroDTE libro = new LibroDTE();
+        Lógica.Material.Libro l = new Lógica.Material.Libro();
+        Lógica.General.Autor a = new Lógica.General.Autor();
+        public static Lógica.General.Autor aut = new Lógica.General.Autor();
+        public static List<Lógica.General.Autor> listAutores = new List<Lógica.General.Autor>();
+        public static List<Lógica.General.Autor> listaAutores = new List<Lógica.General.Autor>();
+        string clave;
+        string folio;
+        Lógica.General.Ejemplar ejemplar = new Lógica.General.Ejemplar();
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            ListBox1.DataSource = listAutores.ToList();
+            folio = Request.QueryString["folio"];
+            clave = Request.QueryString["clave"];
+            if (!IsPostBack)
+            {
+                if (folio != null)
+                {
+                    l = libro.regresarBusquedaPrueba(folio);
+                    listaAutores = libro.regresarAutoresLibro(clave);
+                    cargarLibro();
+                    mostrarAutores(listaAutores);
+                }
+               // ListBox1.DataSource = listAutores.ToList();
+            }
+        }
+        public void cargarLibro()
+        {
+            TextBox2.Text = l.clave;
+            TextBox16.Text = l.ejemplar.folio;
+            TextBox3.Text = l.ejemplar.numEjemplar;
+            TextBox3.Text = l.titulo;
+            TextBox4.Text = l.editorial;
+            TextBox5.Text = Convert.ToString(l.numerEjemplares);
+            TextBox6.Text = l.ubicacion;
+            TextBox7.Text = l.estado;
+            TextBox8.Text = l.reseña;
+            TextBox9.Text = l.idioma;
+            TextBox10.Text = l.genero;
+            TextBox11.Text = l.pais;
+            TextBox12.Text = l.descripcion;
+            TextBox13.Text = Convert.ToString(l.Volumen);
+            TextBox14.Text = Convert.ToString(l.Año);
+            l.Portada = FileUpload1.FileBytes;
+        }
+        public void mostrarAutores(List<Lógica.General.Autor> listaAutores)
+        {
+            foreach (var item in listaAutores)
+            {
+                string NombreAutor = item.nombre+','+item.apellidos;
+                ListBox1.Items.Add(NombreAutor);
+            }
+        }
+        public void nuevoLibro()
+        {
+
+        }
+        [WebMethod(EnableSession = true)]
+        public static void ActualizarAutor(Lógica.General.Autor autor)
+        {
+            listAutores.Add(autor);
+            listaAutores.Add(autor);
+        }
+        [WebMethod(EnableSession = true)]
+        public static void llenar(Lógica.General.Autor autor)
+        {
+            HttpContext.Current.Session.Add("autor", autor);
+        }
+        [WebMethod(EnableSession = true)]
+        public static void BuscarActualizar(Lógica.General.Autor autor, string nombre)
+        {
+            
+            for (int i = 0; i < listAutores.Count;i++ )
+            {
+                
+                
+                if (listAutores[i].nombre == nombre)
+                {
+                    listAutores[i] = autor;
+                    
+                }
+            }
+        }
+       
+        public static Lógica.General.Autor MostrarVariablesDeSesionAutor()
+        {
+            
+            Lógica.General.Autor AutorNuevo = (Lógica.General.Autor)HttpContext.Current.Session["autor"];
+            return AutorNuevo;
+        }
+        public void cargarList()
+        {
+            string nombreA = TextBox16.Text;
+            ListBox1.Items.Add(nombreA);
+        }
+        public void cargar()
+        {
+            l.clave = TextBox2.Text;
+            l.titulo = TextBox3.Text;
+            l.editorial = TextBox4.Text;
+            l.numerEjemplares = int.Parse(TextBox5.Text);
+            l.ubicacion = TextBox6.Text;
+            l.estado = TextBox7.Text;
+            l.reseña = TextBox8.Text;
+            l.idioma = TextBox9.Text;
+            l.genero = TextBox10.Text;
+            l.pais = TextBox11.Text;
+            l.descripcion = TextBox12.Text;
+            l.Volumen = int.Parse(TextBox13.Text);
+            l.Año = int.Parse(TextBox14.Text);
+            l.Portada = FileUpload1.FileBytes;
+            l.ejemplar = new Lógica.General.Ejemplar
+            {
+                claveE = TextBox2.Text,
+                folio = TextBox16.Text,
+                numEjemplar = "1",
+            };
+        }
+        public void cargarActualizacion()
+        {
+            l.clave = TextBox2.Text;
+            l.titulo = TextBox3.Text;
+            l.editorial = TextBox4.Text;
+            l.numerEjemplares = int.Parse(TextBox5.Text);
+            l.ubicacion = TextBox6.Text;
+            l.estado = TextBox7.Text;
+            l.reseña = TextBox8.Text;
+            l.idioma = TextBox9.Text;
+            l.genero = TextBox10.Text;
+            l.pais = TextBox11.Text;
+            l.descripcion = TextBox12.Text;
+            l.Volumen = int.Parse(TextBox13.Text);
+            l.Año = int.Parse(TextBox14.Text);
+            l.Portada = FileUpload1.FileBytes;
+            ejemplar.claveE = TextBox2.Text;
+            ejemplar.folio = TextBox16.Text;
+            ejemplar.numEjemplar = TextBox17.Text;
+        }
+        /*public void cargarGrid(List<Lógica.Material.Libro> listaLibros)
+        {
+            GridView1.DataSource = listaLibros.ToList();
+            GridView1.DataBind();
+        }*/
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            List<Lógica.Material.Libro> listaLibros = new List<Lógica.Material.Libro>();
+            if (folio == null)
+            {
+                cargar();
+                if (libro.estaLibro(l.clave) == false)
+                {
+                    if (libro.RegistrarLibro(l, listAutores) == true)
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "Confirm", "Confirm ('Libro registrado exitosamente');", true);
+                        listaLibros = libro.regresarLibros();
+                        //cargarGrid(listaLibros);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "error", "alert('error en la conexión, no se agregó el libro');", true);
+                    }
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "error", "alert('Error: el libro ya existe en la base de datos');", true);
+                }
+            }
+            if (folio != null)
+            {
+                cargarActualizacion();
+                if (libro.ActualizarLibro(l, listaAutores, ejemplar, folio, clave) == true)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "Confirm", "Confirm ('Libro actualizado exitosamente');", true);
+                }
+            }
+        }
+
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            ListBox1.DataSource = listAutores.ToList();
+        }
+        [WebMethod]
+        public static string GetListaAutores()
+        {
+            
+            string nombre = "";
+            foreach (var item in listAutores)
+            {
+                 nombre = item.nombre;
+            }
+            return JsonConvert.SerializeObject(nombre);
+        }
+
+       /* protected void AgregarControles(TextBox txt, Button btn, Button btn2)
+        {
+            try
+            {
+                pnlMain.Controls.Add(txt);
+                pnlMain.Controls.Add(new LiteralControl(" "));
+                pnlMain.Controls.Add(btn);
+                btn.Attributes.Add("onclick", "abrir_dialog();");
+                pnlMain.Controls.Add(new LiteralControl(" "));
+                pnlMain.Controls.Add(btn2);
+                btn.Attributes.Add("onclick", "abrir_dialog();");
+                pnlMain.Controls.Add(new LiteralControl(" "));
+            }
+            catch (Exception ex)
+            {
+                lblContador.Text = ex.Message;
+            }
+        }
+        */
+        protected void Button4_Click(object sender, EventArgs e)
+        {
+            List<Lógica.General.Autor> listaAux = new List<Lógica.General.Autor>();
+            if (listaAutores.Count > 0)
+            {
+                foreach (var item in listaAutores)
+                {
+                    if (item.nombre == ListBox1.SelectedValue)
+                    {
+                        listaAux.Add(item);
+                        continue;
+                        //listaAutores.Remove(item);
+                    }
+                }
+                foreach (Lógica.General.Autor item in listaAux)
+                {
+                    listaAutores.Remove(item);
+                }
+                mostrarAutores(listaAutores);
+            }
+            if (listAutores.Count > 0)
+            {
+                foreach (var item in listAutores)
+                {
+                    if (item.nombre == ListBox1.SelectedValue)
+                    {
+                        listaAux.Add(item);
+                        continue;
+                        //listaAutores.Remove(item);
+                    }
+                }
+                foreach (Lógica.General.Autor item in listaAux)
+                {
+                    listAutores.Remove(item);
+                }
+                mostrarAutores(listAutores);
+            }
+        }
+
+       /* protected void ButtonGA_Click(object sender, EventArgs e)
+        {
+            ListBox1.DataSource = listAutores.ToList();
+        }*/
+
+        /*protected void ButtonGuardar_Click(object sender, EventArgs e)
+        {
+            ListBox1.DataSource = listAutores;
+        }*/
+    }
+}
